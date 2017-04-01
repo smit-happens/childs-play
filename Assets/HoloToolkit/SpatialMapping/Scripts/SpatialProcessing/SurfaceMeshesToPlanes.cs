@@ -146,6 +146,17 @@ namespace HoloToolkit.Unity.SpatialMapping
         }
 
         /// <summary>
+        /// Iterates through and removes all the active planes 
+        /// </summary>
+        public void RemoveActivePlanes()
+        {
+            for (int index = 0; index < ActivePlanes.Count; index++)
+            {
+                Destroy(ActivePlanes[index]);
+            }
+        }
+
+        /// <summary>
         /// Iterator block, analyzes surface meshes to find planes and create new 3D cubes to represent each plane.
         /// </summary>
         /// <returns>Yield result.</returns>

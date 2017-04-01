@@ -2,11 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
+using HoloToolkit.Unity.SpatialMapping;
 
 public class WallPlace : MonoBehaviour {
 
     GestureRecognizer recognizer;
-    private MeshRenderer currentMesh;
+    bool isDraw = false;
+
+    [Tooltip("How much time (in seconds) that the SurfaceObserver will run after being started; used when 'Limit Scanning By Time' is checked.")]
+    public float scanTime = 30.0f;
+
+    [Tooltip("Material to use when rendering Spatial Mapping meshes while the observer is running.")]
+    public Material defaultMaterial;
+
+    [Tooltip("Optional Material to use when rendering Spatial Mapping meshes after the observer has been stopped.")]
+    public Material secondaryMaterial;
 
     // Use this for initialization
     void Start () {
@@ -16,8 +26,8 @@ public class WallPlace : MonoBehaviour {
         recognizer.TappedEvent += TapEventHandler;
         recognizer.StartCapturingGestures();
 
-        //save the mesh renderer that's on the same object as this script
-        currentMesh = this.gameObject.GetComponentInChildren<MeshRenderer>();
+        // Update surfaceObserver and storedMeshes to use the same material during scanning.
+        SpatialMappingManager.Instance.SetSurfaceMaterial(defaultMaterial);
 
     }
 	
@@ -26,22 +36,37 @@ public class WallPlace : MonoBehaviour {
         var headPosition = Camera.main.transform.position;
         var gazeDirection = Camera.main.transform.forward;
 
-        RaycastHit hitInfo;
-
-        if (Physics.Raycast(headPosition, gazeDirection, out hitInfo))
+        if (!SpatialMappingManager.Instance.IsObserverRunning() && !isDraw)
         {
-            Debug.Log("True");
+            SpatialMappingManager.Instance.StartObserver();
+            Debug.Log("Observer Is starting");
         }
-        else
+    }
+
+    /// <summary>
+    /// Creates planes from the spatial mapping surfaces.
+    /// </summary>
+    private void CreatePlanes()
+    {
+        // Generate planes based on the spatial map.
+        SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
+        if (surfaceToPlanes != null && surfaceToPlanes.enabled)
         {
-            Debug.Log("False");
+            surfaceToPlanes.MakePlanes();
         }
-        //RaycastHit Hit;
-        //Ray 
+    }
 
-        //transform.rotation = Quaternion.LookRotation(-raycastHit.normal);
-
-
+    /// <summary>
+    /// Removes triangles from the spatial mapping surfaces.
+    /// </summary>
+    /// <param name="boundingObjects"></param>
+    private void RemoveVertices(IEnumerable<GameObject> boundingObjects)
+    {
+        RemoveSurfaceVertices removeVerts = RemoveSurfaceVertices.Instance;
+        if (removeVerts != null && removeVerts.enabled)
+        {
+            removeVerts.RemoveSurfaceVerticesWithinBounds(boundingObjects);
+        }
     }
 
     void OnDestroy()
@@ -53,7 +78,14 @@ public class WallPlace : MonoBehaviour {
     {
         Debug.Log("Pinch received!");
 
-        
+
+        if (!isDraw)
+        {
+            SpatialMappingManager.Instance.StopObserver();
+            CreatePlanes();
+            isDraw = true;
+        }
+        SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
     }
 
 }
