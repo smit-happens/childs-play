@@ -18,6 +18,8 @@ public class WallPlace : MonoBehaviour {
     [Tooltip("Optional Material to use when rendering Spatial Mapping meshes after the observer has been stopped.")]
     public Material secondaryMaterial;
 
+    GameObject sphere;
+
     // Use this for initialization
     void Start () {
         //setup the gesture recognizer
@@ -41,6 +43,16 @@ public class WallPlace : MonoBehaviour {
             SpatialMappingManager.Instance.StartObserver();
             Debug.Log("Observer Is starting");
         }
+
+        if(isDraw)
+        {
+            sphere.transform.position = headPosition + gazeDirection * 2f;
+            transform.LookAt(Camera.main.transform);
+        }
+
+        #if UNITY_EDITOR
+            CreatePlanes();
+        #endif
     }
 
     /// <summary>
@@ -78,12 +90,21 @@ public class WallPlace : MonoBehaviour {
     {
         Debug.Log("Pinch received!");
 
-
         if (!isDraw)
         {
             SpatialMappingManager.Instance.StopObserver();
             CreatePlanes();
             isDraw = true;
+
+            sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        }
+        else
+        {
+            Debug.Log("more stuff to come");
+
+            
+
+
         }
         SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
     }

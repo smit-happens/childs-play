@@ -216,7 +216,6 @@ MonoBehaviour:
   scanTime: 10
   defaultMaterial: {fileID: 2100000, guid: d698790d3facd3d4289a13fa1243030a, type: 2}
   secondaryMaterial: {fileID: 15302, guid: 0000000000000000f000000000000000, type: 0}
-  minimumFloors: 1
 --- !u!1 &1154146579
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,6 +337,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114000012149591842, guid: 2ed75ffdf9031c94e8bce4b3d17b9928,
+        type: 2}
+      propertyPath: RoomModel
+      value: 
+      objectReference: {fileID: 100006, guid: dd33a7a59468425409f944adfdcc7b5e, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 2ed75ffdf9031c94e8bce4b3d17b9928, type: 2}
   m_IsPrefabParent: 0
