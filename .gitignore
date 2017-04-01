@@ -337,3 +337,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 *.asset
+*.dll
