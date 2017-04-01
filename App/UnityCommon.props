@@ -1,8 +1,8 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <UnityWSASolutionName>childs-play</UnityWSASolutionName>
-        <UnityWSASolutionDir>C:\Users\Alex\Documents\HoloLens\childs-play\App\</UnityWSASolutionDir>
-        <UnityProjectDir>C:\Users\Alex\Documents\HoloLens\childs-play\</UnityProjectDir>
+        <UnityWSASolutionDir>C:\Users\Danny\Documents\App\childs-play\App\</UnityWSASolutionDir>
+        <UnityProjectDir>C:\Users\Danny\Documents\App\childs-play\</UnityProjectDir>
         <UnityWSAPlayerDir>C:\Program Files\Unity\Editor\Data\PlaybackEngines\MetroSupport\</UnityWSAPlayerDir>
         <UnityWSAToolsDir>$(UnityWSASolutionDir)Unity\Tools\</UnityWSAToolsDir>
     </PropertyGroup>

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2" IgnorableNamespaces="uap uap2 mp" xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10">
   <Identity Name="childs-play" Publisher="CN=DefaultCompany" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="8c7b2767-2d30-4d82-a847-7933da154983" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <mp:PhoneIdentity PhoneProductId="0790414e-541d-47fe-b8e7-81fda9d1ef90" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>childs-play</DisplayName>
     <PublisherDisplayName>DefaultCompany</PublisherDisplayName>
@@ -16,7 +16,7 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="childs-play.App">
       <uap:VisualElements DisplayName="childs-play" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="childs-play" BackgroundColor="transparent">
-        <uap:DefaultTile ShortName="childs-play" Wide310x150Logo="Assets\Wide310x150Logo.png" />
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#FFFFFF" />
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape" />
@@ -28,10 +28,9 @@
     </Application>
   </Applications>
   <Capabilities>
-    <uap:Capability Name="musicLibrary" />
-    <uap:Capability Name="picturesLibrary" />
-    <uap:Capability Name="videosLibrary" />
+    <Capability Name="internetClient" />
     <uap2:Capability Name="spatialPerception" />
     <DeviceCapability Name="webcam" />
+    <DeviceCapability Name="microphone" />
   </Capabilities>
 </Package>
