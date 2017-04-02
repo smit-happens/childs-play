@@ -385,6 +385,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382dddcf5f5b72f498c115b41dd0207e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scanTime: 10
   defaultMaterial: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   secondaryMaterial: {fileID: 15302, guid: 0000000000000000f000000000000000, type: 0}

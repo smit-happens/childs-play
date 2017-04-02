@@ -39,12 +39,7 @@ public class DrawALine : MonoBehaviour
         currentLine.lr = currentLine.myLine.GetComponent<LineRenderer>();
         currentLine.lr.material = new Material(Shader.Find("Particles/Additive"));
 
-        if (color.Equals("black"))
-        {
-            currentLine.lr.startColor = Color.black;
-            currentLine.lr.endColor = Color.black;
-        }
-        else if (color.Equals("blue"))
+        if (color.Equals("blue"))
         {
             currentLine.lr.startColor = Color.blue;
             currentLine.lr.endColor = Color.blue;
@@ -64,7 +59,7 @@ public class DrawALine : MonoBehaviour
             currentLine.lr.startColor = new Color((float)0.9, (float)0.4, (float)0, (float)1.0);
             currentLine.lr.startColor = new Color((float)0.9, (float)0.4, (float)0, (float)1.0);
         }
-        else if (color.Equals("purple"))
+        else if (color.Equals("pink"))
         {
             currentLine.lr.startColor = Color.magenta;
             currentLine.lr.endColor = Color.magenta;
@@ -116,6 +111,11 @@ public class DrawALine : MonoBehaviour
 
     public void Clear()
     {
+        for(int i = 0; i < lineList.Count; i++)
+        {
+            Line currentLine = (Line)lineList[i];
+            Destroy(currentLine.myLine);
+        }
         lineList.Clear();
     }
 }

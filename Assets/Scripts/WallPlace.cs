@@ -20,22 +20,15 @@ public class WallPlace : MonoBehaviour {
 
     GestureRecognizer recognizer;
 
-    //DEBUG CODE
-    //GameObject sphere;
-    //Renderer sr;
-    //////////////////////////////
-
+    //storage of points that make up the line
     ArrayList currentPoints;
-
 
     //Mode variables
     bool isDrawing = false;
     bool isMapping = true;          //default mode is mapping view
 
     //Current drawing color
-    string currentColor = "black";  //default color is black
-
-    
+    string currentColor = "blue";  //default color is blue
 
     // Use this for initialization
     void Start () {
@@ -64,10 +57,10 @@ public class WallPlace : MonoBehaviour {
             this.BroadcastMessage("OnDrawMode");
         });
 
-        keywords.Add("Black", () =>
+        keywords.Add("Clear", () =>
         {
-            // Call the OnDrawMode method on every descendant object.
-            this.BroadcastMessage("SelectBlack");
+            // Call the OnMapMode method on every descendant object.
+            this.BroadcastMessage("OnClear");
         });
 
         keywords.Add("Blue", () =>
@@ -88,10 +81,10 @@ public class WallPlace : MonoBehaviour {
             this.BroadcastMessage("SelectYellow");
         });
 
-        keywords.Add("Purple", () =>
+        keywords.Add("Pink", () =>
         {
             // Call the OnDrawMode method on every descendant object.
-            this.BroadcastMessage("SelectPurple");
+            this.BroadcastMessage("SelectPink");
         });
 
         keywords.Add("Green", () =>
@@ -135,15 +128,17 @@ public class WallPlace : MonoBehaviour {
 
         if(isDrawing)
         {
-
             //sphere.transform.position = currentPoint;    //TODO IMPORTANT LATER
 
-            currentPoints.Add(GameObject.Find("CursorVisual").transform.position);
+            Vector3 point = GameObject.Find("CursorVisual").transform.position;
+
+            currentPoints.Add(point);
 
             if(currentPoints.Count >= 60)
             {
                 this.GetComponent<DrawALine>().SetOfLines(currentPoints, currentColor, (float)0.01);
                 currentPoints.Clear();
+                currentPoints.Add(point);
             }
 
             //transform.LookAt(Camera.main.transform);
@@ -161,6 +156,12 @@ public class WallPlace : MonoBehaviour {
         {
             keywordAction.Invoke();
         }
+    }
+
+    void OnClear()
+    {
+        isDrawing = false;
+        this.GetComponent<DrawALine>().Clear();
     }
 
     void OnMapMode()
@@ -192,11 +193,6 @@ public class WallPlace : MonoBehaviour {
 
 #region colorSelection
 
-    void SelectBlack()
-    {
-        currentColor = "black";
-    }
-
     void SelectBlue()
     {
         currentColor = "blue";
@@ -217,9 +213,9 @@ public class WallPlace : MonoBehaviour {
         currentColor = "orange";
     }
 
-    void SelectPurple()
+    void SelectPink()
     {
-        currentColor = "purple";
+        currentColor = "pink";
     }
 
     void SelectGreen()
@@ -277,18 +273,13 @@ public class WallPlace : MonoBehaviour {
             isDrawing = true;
             isMapping = false;
 
-            //sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            //sr = sphere.GetComponent<Renderer>();
-            //sr.material = new Material(Shader.Find("Particles/Additive"));
-
-            //currentPoint = GameObject.Find("CursorVisual").transform.position;
-
         }
         else if(isDrawing && !isMapping)
         {
             Debug.Log("Drawing = false");
 
             isDrawing = false;
+            currentPoints.Clear();
         }
         else if (!isDrawing && !isMapping)
         {

@@ -7,9 +7,9 @@
 # Default behavior is to never overwrite files
 childs-play.sln: modified
 childs-play\App.cs: 41F3AE63A016F8FC61ED562E4A705368
-childs-play\childs-play.csproj: 5D672CA480755C2D6AAF2186FEADD0D3
+childs-play\childs-play.csproj: modified
 childs-play\childs-play.csproj.user: modified
-childs-play\Package.appxmanifest: F2073BB2D3F46F33E4AA921E6C3B456E
+childs-play\Package.appxmanifest: modified
 childs-play\project.json: 1D02BC64BAC0D041019673A1C4C51737
 childs-play\Assets\SplashScreen.scale-200.png: 60618416282ED104FD1473935716045D
 childs-play\Assets\Square150x150Logo.scale-200.png: E02834B4A5DFB97FF8E212C1CACBB084
