@@ -165,23 +165,28 @@ public class WallPlace : MonoBehaviour {
 
     void OnMapMode()
     {
-        Debug.Log("switching to map mode");
-
         if (!isMapping)
         {
+            Debug.Log("switching to map mode");
+
             SpatialMappingManager.Instance.SetSurfaceMaterial(defaultMaterial);
             isMapping = true;
             isDrawing = false;
         }
     }
 
+    /// <summary>
+    /// Takes you out of Mapping mode, into a "ready to draw" mode
+    /// </summary>
     void OnDrawMode()
     {
-        if (isMapping)
+        if (!isDrawing)
         {
+            Debug.Log("switching to Drawing mode");
+
             SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
             SpatialMappingManager.Instance.StopObserver();
-            isMapping = !isMapping;
+            isMapping = false;
         }
     }
 
@@ -270,6 +275,7 @@ public class WallPlace : MonoBehaviour {
             SpatialMappingManager.Instance.StopObserver();
             //CreatePlanes();
             isDrawing = true;
+            isMapping = false;
 
             //sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             //sr = sphere.GetComponent<Renderer>();
@@ -278,15 +284,15 @@ public class WallPlace : MonoBehaviour {
             //currentPoint = GameObject.Find("CursorVisual").transform.position;
 
         }
-        else
+        else if(isDrawing && !isMapping)
         {
             Debug.Log("Drawing = false");
 
             isDrawing = false;
-
-            //Destroy(sphere);
-
-
+        }
+        else if (!isDrawing && !isMapping)
+        {
+            isDrawing = true;
         }
     }
 
