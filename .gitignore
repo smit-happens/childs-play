@@ -338,3 +338,8 @@ sysinfo.txt
 *.unitypackage
 *.asset
 *.dll
+App/childs-play/Assembly-CSharp-firstpass.dll
+App/childs-play/Data/globalgamemanagers
+App/childs-play/Unprocessed/UnityEngine.Analytics.dll
+App/childs-play/Unprocessed/UnityEngine.Networking.dll
+App/UnityOverwrite.txt
