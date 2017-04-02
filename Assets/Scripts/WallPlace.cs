@@ -1,16 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.VR.WSA.Input;
 using HoloToolkit.Unity.SpatialMapping;
+using UnityEngine.Windows.Speech;
 
 public class WallPlace : MonoBehaviour {
-
-    GestureRecognizer recognizer;
-    bool isDraw = false;
-
-    [Tooltip("How much time (in seconds) that the SurfaceObserver will run after being started; used when 'Limit Scanning By Time' is checked.")]
-    public float scanTime = 30.0f;
 
     [Tooltip("Material to use when rendering Spatial Mapping meshes while the observer is running.")]
     public Material defaultMaterial;
@@ -18,7 +14,28 @@ public class WallPlace : MonoBehaviour {
     [Tooltip("Optional Material to use when rendering Spatial Mapping meshes after the observer has been stopped.")]
     public Material secondaryMaterial;
 
-    GameObject sphere;
+    //used for speech command input]
+    KeywordRecognizer keywordRecognizer = null;
+    Dictionary<string, System.Action> keywords = new Dictionary<string, System.Action>();
+
+    GestureRecognizer recognizer;
+
+    //DEBUG CODE
+    //GameObject sphere;
+    //Renderer sr;
+    //////////////////////////////
+
+    ArrayList currentPoints;
+
+
+    //Mode variables
+    bool isDrawing = false;
+    bool isMapping = true;          //default mode is mapping view
+
+    //Current drawing color
+    string currentColor = "black";  //default color is black
+
+    
 
     // Use this for initialization
     void Start () {
@@ -31,6 +48,78 @@ public class WallPlace : MonoBehaviour {
         // Update surfaceObserver and storedMeshes to use the same material during scanning.
         SpatialMappingManager.Instance.SetSurfaceMaterial(defaultMaterial);
 
+        currentPoints = new ArrayList();
+
+        #region keywordDeclaration
+
+        keywords.Add("Map", () =>
+        {
+            // Call the OnMapMode method on every descendant object.
+            this.BroadcastMessage("OnMapMode");
+        });
+
+        keywords.Add("Draw", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("OnDrawMode");
+        });
+
+        keywords.Add("Black", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectBlack");
+        });
+
+        keywords.Add("Blue", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectBlue");
+        });
+
+        keywords.Add("Red", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectRed");
+        });
+
+        keywords.Add("Yellow", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectYellow");
+        });
+
+        keywords.Add("Purple", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectPurple");
+        });
+
+        keywords.Add("Green", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectGreen");
+        });
+
+        keywords.Add("White", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectWhite");
+        });
+
+        keywords.Add("Orange", () =>
+        {
+            // Call the OnDrawMode method on every descendant object.
+            this.BroadcastMessage("SelectOrange");
+        });
+
+        // Tell the KeywordRecognizer about our keywords.
+        keywordRecognizer = new KeywordRecognizer(keywords.Keys.ToArray());
+
+        // Register a callback for the KeywordRecognizer and start recognizing!
+        keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+        keywordRecognizer.Start();
+
+        #endregion
     }
 	
 	// Update is called once per frame
@@ -38,35 +127,120 @@ public class WallPlace : MonoBehaviour {
         var headPosition = Camera.main.transform.position;
         var gazeDirection = Camera.main.transform.forward;
 
-        if (!SpatialMappingManager.Instance.IsObserverRunning() && !isDraw)
+        if (!SpatialMappingManager.Instance.IsObserverRunning() && !isDrawing)
         {
             SpatialMappingManager.Instance.StartObserver();
             Debug.Log("Observer Is starting");
         }
 
-        if(isDraw)
+        if(isDrawing)
         {
-            sphere.transform.position = headPosition + gazeDirection * 2f;
-            transform.LookAt(Camera.main.transform);
+
+            //sphere.transform.position = currentPoint;    //TODO IMPORTANT LATER
+
+            currentPoints.Add(GameObject.Find("CursorVisual").transform.position);
+
+            if(currentPoints.Count >= 60)
+            {
+                this.GetComponent<DrawALine>().SetOfLines(currentPoints, currentColor, (float)0.01);
+                currentPoints.Clear();
+            }
+
+            //transform.LookAt(Camera.main.transform);
         }
 
-        #if UNITY_EDITOR
-            CreatePlanes();
-        #endif
     }
 
     /// <summary>
-    /// Creates planes from the spatial mapping surfaces.
+    /// Handles which keyword was actually heard 
     /// </summary>
-    private void CreatePlanes()
+    private void KeywordRecognizer_OnPhraseRecognized(PhraseRecognizedEventArgs args)
     {
-        // Generate planes based on the spatial map.
-        SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
-        if (surfaceToPlanes != null && surfaceToPlanes.enabled)
+        System.Action keywordAction;
+        if (keywords.TryGetValue(args.text, out keywordAction))
         {
-            surfaceToPlanes.MakePlanes();
+            keywordAction.Invoke();
         }
     }
+
+    void OnMapMode()
+    {
+        Debug.Log("switching to map mode");
+
+        if (!isMapping)
+        {
+            SpatialMappingManager.Instance.SetSurfaceMaterial(defaultMaterial);
+            isMapping = true;
+            isDrawing = false;
+        }
+    }
+
+    void OnDrawMode()
+    {
+        if (isMapping)
+        {
+            SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
+            SpatialMappingManager.Instance.StopObserver();
+            isMapping = !isMapping;
+        }
+    }
+
+#region colorSelection
+
+    void SelectBlack()
+    {
+        currentColor = "black";
+    }
+
+    void SelectBlue()
+    {
+        currentColor = "blue";
+    }
+
+    void SelectRed()
+    {
+        currentColor = "red";
+    }
+
+    void SelectYellow()
+    {
+        currentColor = "yellow";
+    }
+
+    void SelectOrange()
+    {
+        currentColor = "orange";
+    }
+
+    void SelectPurple()
+    {
+        currentColor = "purple";
+    }
+
+    void SelectGreen()
+    {
+        currentColor = "green";
+    }
+
+    void SelectWhite()
+    {
+        currentColor = "white";
+    }
+
+    #endregion
+
+    ///// <summary>
+    ///// Creates planes from the spatial mapping surfaces.
+    ///// </summary>
+    //private void CreatePlanes()
+    //{
+    //    // Generate planes based on the spatial map.
+    //    SurfaceMeshesToPlanes surfaceToPlanes = SurfaceMeshesToPlanes.Instance;
+    //    if (surfaceToPlanes != null && surfaceToPlanes.enabled)
+    //    {
+    //        surfaceToPlanes.MakePlanes();
+    //    }
+    //}
 
     /// <summary>
     /// Removes triangles from the spatial mapping surfaces.
@@ -90,23 +264,30 @@ public class WallPlace : MonoBehaviour {
     {
         Debug.Log("Pinch received!");
 
-        if (!isDraw)
+        if (!isDrawing && isMapping)
         {
+            SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
             SpatialMappingManager.Instance.StopObserver();
-            CreatePlanes();
-            isDraw = true;
+            //CreatePlanes();
+            isDrawing = true;
 
-            sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //sr = sphere.GetComponent<Renderer>();
+            //sr.material = new Material(Shader.Find("Particles/Additive"));
+
+            //currentPoint = GameObject.Find("CursorVisual").transform.position;
+
         }
         else
         {
-            Debug.Log("more stuff to come");
+            Debug.Log("Drawing = false");
 
-            
+            isDrawing = false;
+
+            //Destroy(sphere);
 
 
         }
-        SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
     }
 
 }

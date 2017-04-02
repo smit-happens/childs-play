@@ -1,113 +1,121 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class DrawALine : MonoBehaviour {
-	GameObject myLine;// = new GameObject();
-	LineRenderer lr;// = myLine.GetComponent<LineRenderer>();
-	int totalPieces;
-	Vector3[] allPoints;
-	Color colorUsed;
-	// Use this for initialization
-	void Start () {
-		
-		/*myLine = new GameObject();
-		myLine.AddComponent<LineRenderer>();
-		lr = myLine.GetComponent<LineRenderer>();
-		//renderer.material.color = Color.cyan;
-		//lr.material = renderer.material;
-        //lr.material.color = Color.white;
-		lr.material = new Material (Shader.Find("Particles/Additive"));
-		lr.startColor = Color.black;
-		lr.endColor = Color.white;
-        lr.startWidth = (float)0.01;
-        lr.endWidth = (float)1.0;
-        //myLine.transform.position = new Vector3( (float)0.0,  (float)0.0,  (float)10.0);
-        int count = 0;
-		lr.positionCount = 11;*/
-		Vector3[] points = new Vector3[11];
+public struct Line
+{
+    public int totalPieces;
+    public Vector3[] allPoints;
+    public Color colorUsed;
+    public GameObject myLine;// = new GameObject();
+    public LineRenderer lr;// = myLine.GetComponent<LineRenderer>();
+}
+
+public class DrawALine : MonoBehaviour
+{
+
+    ArrayList lineList;
+    // Use this for initialization
+    void Start()
+    {
+
+        lineList = new ArrayList();
+        /*Vector3[] points = new Vector3[11];
         Vector3[] points2 = new Vector3[11];
-        for (int i = -5; i <= 5; i++) {
-			points[i+5] = new Vector3((float)i, (float)0.0, (float)2.0);
+        for (int i = -5; i <= 5; i++)
+        {
+            points[i + 5] = new Vector3((float)i, (float)0.0, (float)2.0);
             points2[i + 5] = new Vector3((float)i, (float)i, (float)2.0);
         }
-		setOfLines (points, "red", (float)0.01);
-        setOfLines(points2, "blue", (float)0.01);
-        /*Vector3 start = new Vector3((float)1.0, (float)1.0, (float)1.0);
-		Vector3 end = new Vector3((float)2.0,(float)2.0,(float)2.0);
-		myLine.transform.position = start;
-		myLine.AddComponent<LineRenderer>();
-		LineRenderer lr = myLine.GetComponent<LineRenderer>();
-		lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-		lr.SetColors(Color.red, Color.blue);
-		lr.SetWidth(0.1f, 0.1f);
-		lr.SetPosition (0,start);
-		lr.SetPosition(1, end);*/
-        //GameObject.Destroy(myLine, duration);
+        setOfLines(points, "orange", (float)0.01);
+        setOfLines(points2, "blue", (float)0.01);*/
+
     }
 
-	void setOfLines(Vector3[] points, string color, float width)
-	{
-		myLine = new GameObject();
-		myLine.AddComponent<LineRenderer>();
-		lr = myLine.GetComponent<LineRenderer>();
-		lr.material = Resources.Load ("defaultMat") as Material;
+    public void SetOfLines(ArrayList points, string color, float width)
+    {   
+        Line currentLine = new Line();
+        currentLine.myLine = new GameObject();
+        currentLine.myLine.AddComponent<LineRenderer>();
+        currentLine.lr = currentLine.myLine.GetComponent<LineRenderer>();
+        currentLine.lr.material = new Material(Shader.Find("Particles/Additive"));
 
-		if (color.Equals ("black")) {
-			lr.startColor = Color.black;
-			lr.endColor = Color.black;
-		}
-		else if(color.Equals("blue")) {
-			lr.startColor = Color.blue;
-			lr.endColor = Color.blue;
-		}
-		else if(color.Equals("red")) {
-			lr.startColor = Color.red;
-			lr.endColor = Color.red;
-		}
-		else if(color.Equals("yellow")) {
-			lr.startColor = Color.yellow;
-			lr.endColor = Color.yellow;
-		}
-		else if(color.Equals("purple")) {
-			lr.startColor = Color.magenta;
-			lr.endColor = Color.magenta;
-		}
-		else if(color.Equals("green")) {
-			lr.startColor = Color.green;
-			lr.endColor = Color.green;
-		}
-		else if(color.Equals("white")) {
-			lr.startColor = Color.white;
-			lr.endColor = Color.white;
-		}
-			
-		colorUsed = lr.startColor;
-		lr.startWidth = width;
-		lr.endWidth = width;
-		totalPieces = points.Length;
-		allPoints = points;
-		lr.positionCount = totalPieces;
-		lr.SetPositions (points);
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		int count = 0;
-        lr.positionCount = totalPieces;
-        
-		lr.material = new Material (Shader.Find ("Particles/Additive"));
-		lr.startColor = colorUsed;
-		lr.endColor = colorUsed;
-		lr.SetPositions (allPoints);
-        //lr.startWidth = (float)0.01;
-        //lr.endWidth = (float)0.01;
-        /*for (int i = -5; i <= 5; i++) {
-			Vector3 start = new Vector3((float)i, (float)i, (float)2.0);
-			Vector3 end = new Vector3((float)i+(float)1.0,(float)i+(float)1.0,(float)2.0);
+        if (color.Equals("black"))
+        {
+            currentLine.lr.startColor = Color.black;
+            currentLine.lr.endColor = Color.black;
+        }
+        else if (color.Equals("blue"))
+        {
+            currentLine.lr.startColor = Color.blue;
+            currentLine.lr.endColor = Color.blue;
+        }
+        else if (color.Equals("red"))
+        {
+            currentLine.lr.startColor = Color.red;
+            currentLine.lr.endColor = Color.red;
+        }
+        else if (color.Equals("yellow"))
+        {
+            currentLine.lr.startColor = Color.yellow;
+            currentLine.lr.endColor = Color.yellow;
+        }
+        else if (color.Equals("orange"))
+        {
+            currentLine.lr.startColor = new Color((float)0.9, (float)0.4, (float)0, (float)1.0);
+            currentLine.lr.startColor = new Color((float)0.9, (float)0.4, (float)0, (float)1.0);
+        }
+        else if (color.Equals("purple"))
+        {
+            currentLine.lr.startColor = Color.magenta;
+            currentLine.lr.endColor = Color.magenta;
+        }
+        else if (color.Equals("green"))
+        {
+            currentLine.lr.startColor = Color.green;
+            currentLine.lr.endColor = Color.green;
+        }
+        else if (color.Equals("white"))
+        {
+            currentLine.lr.startColor = Color.white;
+            currentLine.lr.endColor = Color.white;
+        }
 
-			lr.SetPosition (count,start);
-			lr.SetPosition(count++, end);
-		}*/
-	}
+        currentLine.colorUsed = currentLine.lr.startColor;
+        currentLine.lr.startWidth = width;
+        currentLine.lr.endWidth = width;
+        currentLine.totalPieces = points.Count;
+        currentLine.allPoints = new Vector3[currentLine.totalPieces];
+        currentLine.lr.positionCount = currentLine.totalPieces;
+        Vector3[] pointsArray = new Vector3[points.Count];
+        for(int i = 0; i < points.Count; i++)
+        {
+            pointsArray[i] = (Vector3)points[i];
+        }
+        currentLine.lr.SetPositions(pointsArray);
+        currentLine.allPoints = pointsArray;
+        lineList.Add(currentLine);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        Line currentLine;
+        for (int i = 0; i < lineList.Count; i++)
+        {
+            currentLine = (Line)lineList[i];
+            currentLine.lr.positionCount = currentLine.totalPieces;
+
+            currentLine.lr.material = new Material(Shader.Find("Particles/Additive"));
+            currentLine.lr.startColor = currentLine.colorUsed;
+            currentLine.lr.endColor = currentLine.colorUsed;
+
+            currentLine.lr.SetPositions(currentLine.allPoints);
+        }
+
+    }
+
+    public void Clear()
+    {
+        lineList.Clear();
+    }
 }
