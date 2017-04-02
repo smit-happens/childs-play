@@ -123,7 +123,7 @@ public class WallPlace : MonoBehaviour {
         if (!SpatialMappingManager.Instance.IsObserverRunning() && !isDrawing)
         {
             SpatialMappingManager.Instance.StartObserver();
-            Debug.Log("Observer Is starting");
+            //Debug.Log("Observer Is starting");
         }
 
         if(isDrawing)
@@ -168,7 +168,7 @@ public class WallPlace : MonoBehaviour {
     {
         if (!isMapping)
         {
-            Debug.Log("switching to map mode");
+            //Debug.Log("switching to map mode");
 
             SpatialMappingManager.Instance.SetSurfaceMaterial(defaultMaterial);
             isMapping = true;
@@ -183,7 +183,7 @@ public class WallPlace : MonoBehaviour {
     {
         if (!isDrawing)
         {
-            Debug.Log("switching to Drawing mode");
+            //Debug.Log("switching to Drawing mode");
 
             SpatialMappingManager.Instance.SetSurfaceMaterial(secondaryMaterial);
             SpatialMappingManager.Instance.StopObserver();
@@ -263,7 +263,7 @@ public class WallPlace : MonoBehaviour {
 
     void TapEventHandler(InteractionSourceKind source, int tapNum, Ray headRay)
     {
-        Debug.Log("Pinch received!");
+        //Debug.Log("Pinch received!");
 
         if (!isDrawing && isMapping)
         {
@@ -276,7 +276,7 @@ public class WallPlace : MonoBehaviour {
         }
         else if(isDrawing && !isMapping)
         {
-            Debug.Log("Drawing = false");
+            //Debug.Log("Drawing = false");
 
             isDrawing = false;
             currentPoints.Clear();
